@@ -276,28 +276,6 @@ body {
   transform: translateY(0);
 }
 
-.instructions {
-  background: #F0F8FF;
-  border-radius: 15px;
-  padding: 15px;
-  text-align: left;
-}
-
-.instructions p {
-  font-weight: bold;
-  color: #4A90E2;
-  margin-bottom: 8px;
-}
-
-.instructions ul {
-  list-style: none;
-  color: #666;
-}
-
-.instructions li {
-  margin: 5px 0;
-  font-size: 14px;
-}
 
 /* Responsive design */
 @media (max-width: 480px) {
