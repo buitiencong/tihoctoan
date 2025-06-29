@@ -8,6 +8,12 @@ let showFireworks = false;
 let fireworksParticles = [];
 let currentTheme = 0;
 
+const bridgeImage = new Image();
+bridgeImage.src = "bridge_1.png";
+const carImage = new Image();
+carImage.src = "car_1.png";
+
+
 const maxBridgePieces = 5;
 
 const canvasEl = document.getElementById("game-canvas");
@@ -136,18 +142,22 @@ function drawGame() {
   ctx.fillStyle = "#ddeeff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#654321";
+  // Vẽ mảnh cầu bằng hình ảnh
   const pieceWidth = (canvas.width - 120) / maxBridgePieces;
   for (let i = 0; i < bridgePieces; i++) {
-    ctx.fillRect(60 + i * pieceWidth, canvas.height - 40, pieceWidth - 4, 12);
+    const x = 60 + i * pieceWidth;
+    const y = canvas.height - 40;
+    ctx.drawImage(bridgeImage, x, y, pieceWidth - 4, 12);
   }
 
+  // Vẽ xe nếu thắng
   if (gameStatus === "won") {
-    ctx.fillStyle = "#dc143c";
-    ctx.fillRect(carPosition, canvas.height - 60, 40, 20);
+    const carY = canvas.height - 60;
+    ctx.drawImage(carImage, carPosition, carY, 40, 20); // tùy chỉnh size nếu cần
     carPosition += 2;
   }
 }
+
 
 function loop() {
   requestAnimationFrame(loop);

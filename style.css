@@ -326,11 +326,15 @@ body {
 /* PWA specific styles */
 @media (display-mode: standalone) {
   body {
+    user-select: none;
     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
   }
 }
+
 
 /* Pixel art style enhancements */
 .game-canvas {
