@@ -1,0 +1,155 @@
+
+let canvas, ctx;
+let currentQuestion = null;
+let bridgePieces = 0;
+let gameStatus = 'playing';
+let carPosition = -50;
+let showFireworks = false;
+let fireworksParticles = [];
+let currentTheme = 0;
+
+const maxBridgePieces = 5;
+
+const canvasEl = document.getElementById("game-canvas");
+const questionTextEl = document.getElementById("math-question");
+const answerInputEl = document.getElementById("answer-input");
+const formEl = document.getElementById("question-form");
+const feedbackEl = document.getElementById("feedback");
+const resetBtn = document.getElementById("reset-btn");
+const progressEl = document.getElementById("progress");
+const themeNameEl = document.getElementById("theme-name");
+
+const victorySectionEl = document.getElementById("victory-section");
+const victoryMsgEl = document.getElementById("victory-message");
+const finalScoreEl = document.getElementById("final-score");
+const continueBtn = document.getElementById("continue-btn");
+const restartBtn = document.getElementById("restart-btn");
+const nextThemeEl = document.getElementById("next-theme-preview");
+
+function generateQuestion() {
+  const ops = ['+', '-', '*'];
+  const op = ops[Math.floor(Math.random() * ops.length)];
+  let n1, n2, ans;
+  if (op === '+') {
+    n1 = Math.floor(Math.random() * 20 + 1);
+    n2 = Math.floor(Math.random() * 20 + 1);
+    ans = n1 + n2;
+  } else if (op === '-') {
+    n1 = Math.floor(Math.random() * 20 + 10);
+    n2 = Math.floor(Math.random() * 10 + 1);
+    ans = n1 - n2;
+  } else {
+    n1 = Math.floor(Math.random() * 10 + 1);
+    n2 = Math.floor(Math.random() * 10 + 1);
+    ans = n1 * n2;
+  }
+  return { question: n1 + ' ' + op + ' ' + n2, answer: ans };
+}
+
+function updateUI() {
+  questionTextEl.textContent = currentQuestion.question + ' = ?';
+  progressEl.textContent = 'Tiến độ cầu: ' + bridgePieces + '/' + maxBridgePieces;
+  themeNameEl.textContent = gameThemes[currentTheme].name;
+}
+
+formEl.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const userAns = parseInt(answerInputEl.value);
+  answerInputEl.value = '';
+
+  if (userAns === currentQuestion.answer) {
+    bridgePieces = Math.min(bridgePieces + 1, maxBridgePieces);
+    if (bridgePieces === maxBridgePieces) {
+      gameStatus = 'won';
+      carPosition = -50;
+      showVictory();
+    } else {
+      showFeedback('✅ Đúng rồi!');
+    }
+  } else {
+    bridgePieces = Math.max(bridgePieces - 1, 0);
+    showFeedback('❌ Sai rồi!');
+  }
+
+  if (gameStatus !== 'won') {
+    currentQuestion = generateQuestion();
+    updateUI();
+  }
+});
+
+function showFeedback(msg) {
+  feedbackEl.textContent = msg;
+  feedbackEl.style.display = 'block';
+  setTimeout(() => {
+    feedbackEl.style.display = 'none';
+  }, 3000);
+}
+
+function showVictory() {
+  feedbackEl.style.display = 'none';
+  victorySectionEl.style.display = 'block';
+  victoryMsgEl.innerHTML = 'Bạn đã hoàn thành ' + gameThemes[currentTheme].name + '!<br>Xe đã chạy qua cầu!';
+  finalScoreEl.style.display = 'none';
+  nextThemeEl.innerHTML = 'Level tiếp theo: <strong>' + gameThemes[(currentTheme + 1) % gameThemes.length].name + '</strong><br>' +
+    gameThemes[(currentTheme + 1) % gameThemes.length].description;
+}
+
+function resetGame() {
+  bridgePieces = 0;
+  gameStatus = 'playing';
+  carPosition = -50;
+  showFireworks = false;
+  fireworksParticles = [];
+  currentQuestion = generateQuestion();
+  victorySectionEl.style.display = 'none';
+  finalScoreEl.style.display = 'none';
+  updateUI();
+}
+
+function continueGame() {
+  currentTheme = (currentTheme + 1) % gameThemes.length;
+  resetGame();
+}
+
+resetBtn.addEventListener("click", resetGame);
+restartBtn.addEventListener("click", resetGame);
+continueBtn.addEventListener("click", continueGame);
+
+const gameThemes = [
+  { name: "Forest Valley", description: "Cầu rừng xanh mát" },
+  { name: "Desert Canyon", description: "Cầu sa mạc huyền bí" },
+  { name: "City Skyline", description: "Cầu thành phố hiện đại" },
+  { name: "Space Station", description: "Cầu vũ trụ tương lai" },
+  { name: "Autumn Lake", description: "Cầu mùa thu lãng mạn" }
+];
+
+window.onload = () => {
+  canvas = canvasEl;
+  ctx = canvas.getContext("2d");
+  currentQuestion = generateQuestion();
+  updateUI();
+  loop();
+};
+
+function drawGame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#ddeeff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#654321";
+  const pieceWidth = (canvas.width - 120) / maxBridgePieces;
+  for (let i = 0; i < bridgePieces; i++) {
+    ctx.fillRect(60 + i * pieceWidth, canvas.height - 40, pieceWidth - 4, 12);
+  }
+
+  if (gameStatus === "won") {
+    ctx.fillStyle = "#dc143c";
+    ctx.fillRect(carPosition, canvas.height - 60, 40, 20);
+    carPosition += 2;
+  }
+}
+
+function loop() {
+  requestAnimationFrame(loop);
+  drawGame();
+}

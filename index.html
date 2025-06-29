@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bridge Math Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="App">
+    <div class="game-container">
+      <!-- Top half - Bridge Game -->
+      <div class="game-area">
+        <div class="score-bar">
+
+          <div class="theme-info">
+            <div class="theme-name" id="theme-name">Chủ đề</div>
+            <div class="progress" id="progress">Tiến độ cầu: 0/5</div>
+          </div>
+          <button id="reset-btn" class="reset-btn">🔄 Reset</button>
+        </div>
+        <canvas id="game-canvas" width="400" height="250" class="game-canvas"></canvas>
+        <div class="feedback" id="feedback" style="display: none;"></div>
+      </div>
+
+      <!-- Bottom half - Math Questions -->
+      <div class="question-area">
+        <div class="question-container">
+          <h2>Giải toán để xây cầu!</h2>
+          <form id="question-form" class="question-form">
+            <div class="question">
+              <span id="math-question" class="math-question">1 + 1 = ?</span>
+            </div>
+            <div class="answer-input">
+              <input type="number" id="answer-input" class="answer-field" placeholder="Nhập đáp án" required />
+              <button type="submit" class="submit-btn">Trả lời</button>
+            </div>
+          </form>
+
+          <div id="victory-section" class="victory-section" style="display: none;">
+            <h3 class="victory-title">🏆 CHIẾN THẮNG! 🏆</h3>
+            <p class="victory-message" id="victory-message"></p>
+            <div class="victory-buttons">
+              <button id="continue-btn" class="continue-btn">🌟 Chơi tiếp</button>
+              <button id="restart-btn" class="restart-btn">🔄 Chơi lại từ đầu</button>
+            </div>
+            <div class="next-theme-preview" id="next-theme-preview"></div>
+          </div>
+
+          <div class="instructions">
+            <p>📖 Hướng dẫn:</p>
+            <ul>
+              <li>• Trả lời đúng: Thêm 1 mảnh cầu</li>
+              <li>• Trả lời sai: Mất 1 mảnh cầu</li>
+              <li>• Hoàn thành 5 mảnh: Xe có thể qua cầu!</li>
+              <li>• Chiến thắng: Pháo hoa và xe chạy qua!</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
