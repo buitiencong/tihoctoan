@@ -94,6 +94,8 @@ function showFeedback(msg) {
 function showVictory() {
   feedbackEl.style.display = 'none';
   victorySectionEl.style.display = 'block';
+  showFireworks = true;
+  createFirework(canvas.width / 2, canvas.height / 2);
   victoryMsgEl.innerHTML = 'Bạn đã hoàn thành ' + gameThemes[currentTheme].name + '!<br>Xe đã chạy qua cầu!';
   finalScoreEl.style.display = 'none';
   nextThemeEl.innerHTML = 'Level tiếp theo: <strong>' + gameThemes[(currentTheme + 1) % gameThemes.length].name + '</strong><br>' +
@@ -122,6 +124,13 @@ restartBtn.addEventListener("click", resetGame);
 continueBtn.addEventListener("click", continueGame);
 
 const gameThemes = [
+  // {
+  //   name: "Forest Valley",
+  //   description: "Cầu rừng xanh mát",
+  //   background: "bg_forest.png",
+  //   bridge: "bridge_forest.png",
+  //   car: "car_forest.png"
+  // },
   { name: "Forest Valley", description: "Cầu rừng xanh mát" },
   { name: "Desert Canyon", description: "Cầu sa mạc huyền bí" },
   { name: "City Skyline", description: "Cầu thành phố hiện đại" },
@@ -156,10 +165,47 @@ function drawGame() {
     ctx.drawImage(carImage, carPosition, carY, 40, 20); // tùy chỉnh size nếu cần
     carPosition += 2;
   }
+
+    // Vẽ pháo hoa nếu đang ở trạng thái thắng
+  if (showFireworks) {
+    fireworksParticles.forEach(p => {
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Cập nhật vị trí
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05; // trọng lực
+      p.alpha -= 0.015; // mờ dần
+    });
+    // Loại bỏ các hạt đã tắt
+    fireworksParticles = fireworksParticles.filter(p => p.alpha > 0);
+    ctx.globalAlpha = 1.0;
+  }
+
 }
 
 
 function loop() {
   requestAnimationFrame(loop);
   drawGame();
+}
+
+// Tạo pháo hoa
+function createFirework(x, y) {
+  for (let i = 0; i < 50; i++) {
+    const angle = Math.random() * 2 * Math.PI;
+    const speed = Math.random() * 3 + 2;
+    fireworksParticles.push({
+      x,
+      y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      alpha: 1,
+      color: `hsl(${Math.random() * 360}, 100%, 50%)`
+    });
+  }
 }
