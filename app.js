@@ -124,14 +124,14 @@ restartBtn.addEventListener("click", resetGame);
 continueBtn.addEventListener("click", continueGame);
 
 const gameThemes = [
-  // {
-  //   name: "Forest Valley",
-  //   description: "Cầu rừng xanh mát",
-  //   background: "bg_forest.png",
-  //   bridge: "bridge_forest.png",
-  //   car: "car_forest.png"
-  // },
-  { name: "Forest Valley", description: "Cầu rừng xanh mát" },
+  {
+    name: "Forest Valley",
+    description: "Cầu rừng xanh mát",
+    background: "bg.png",
+    // bridge: "bridge_forest.png",
+    // car: "car_forest.png"
+  },
+  // { name: "Forest Valley", description: "Cầu rừng xanh mát" },
   { name: "Desert Canyon", description: "Cầu sa mạc huyền bí" },
   { name: "City Skyline", description: "Cầu thành phố hiện đại" },
   { name: "Space Station", description: "Cầu vũ trụ tương lai" },
