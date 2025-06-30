@@ -12,6 +12,17 @@ const bridgeImage = new Image();
 bridgeImage.src = "bridge_1.png";
 const carImage = new Image();
 carImage.src = "car_1.png";
+const backgroundImage = new Image();
+backgroundImage.src = "bg.png";
+backgroundImage.onload = () => {
+  console.log("✔ Ảnh nền đã tải xong:", backgroundImage.src);
+};
+
+backgroundImage.onerror = () => {
+  console.error("❌ Lỗi tải ảnh nền:", backgroundImage.src);
+};
+
+
 
 
 const maxBridgePieces = 5;
@@ -142,14 +153,20 @@ window.onload = () => {
   canvas = canvasEl;
   ctx = canvas.getContext("2d");
   currentQuestion = generateQuestion();
+  resetGame();
   updateUI();
   loop();
 };
 
 function drawGame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#ddeeff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (backgroundImage && backgroundImage.naturalWidth) {
+    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+  } else {
+    ctx.fillStyle = "#ddeeff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
 
   // Vẽ mảnh cầu bằng hình ảnh
   const pieceWidth = (canvas.width - 120) / maxBridgePieces;
