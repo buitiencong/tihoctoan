@@ -164,13 +164,7 @@ function initNewDatabase() {
   saveToLocal();         // ✅ Lưu DB mới vào localforage
   loadTour();            // ✅ Cập nhật UI
 
-  if (isIntroClosed) {
-    checkIfNoTours();   // nếu có xử lý riêng khi chưa có tour
-  } else {
-    window._pendingInitAfterIntro = () => {
-      checkIfNoTours();
-    };
-  }
+  window._pendingInitAfterIntro = () => checkIfNoTours();
 }
 
 // Hàm để lưu các thay đổi cơ sở dữ liệu
