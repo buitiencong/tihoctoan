@@ -59,7 +59,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("sqlite-ready", () => {
     loadTour();
 
-    checkIfNoTours();
+    //checkIfNoTours();
+    if (isIntroClosed) {
+      checkIfNoTours();
+    } else {
+      window._pendingInitAfterIntro = () => checkIfNoTours();
+    }
 
     // Fallback nếu loadTour không thành công sau 300ms
     setTimeout(() => {
@@ -223,17 +228,17 @@ function checkIfNoTours() {
     const count = result[0]?.values[0][0] || 0;
 
     if (count === 0) {
-      // Nếu intro chưa đóng, chờ sau khi user tắt modal
+      // Nếu intro chưa đóng thì chờ rồi gọi lại sau
       if (!isIntroClosed) {
-        window._pendingInitAfterIntro = () => checkIfNoTours(); // gọi lại sau
+        window._pendingInitAfterIntro = () => checkIfNoTours();
         return;
       }
 
-      // Nếu intro đã đóng thì mới hiện thông báo
+      // Chỉ hiển thị sau khi intro đã đóng
       setTimeout(() => {
-        alert("🧭 Chưa có tour nào được tạo.\n" + "      Hãy tạo tour mới để bắt đầu.");
+        showToast("🧭 Chưa có tour nào được tạo.<br>Hãy tạo tour mới để bắt đầu.", '', true);
         handleThemTour();
-      }, 200);
+      }, 300);
     }
   } catch (err) {
     console.error("Lỗi khi kiểm tra tour:", err.message);
